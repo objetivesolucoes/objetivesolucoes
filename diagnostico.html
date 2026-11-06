@@ -133,7 +133,7 @@ fetch(WEBHOOK_URL, {
 }).then(res => console.log("Dados integrados com sucesso!"))
   .catch(err => console.error("Erro na integração:", err));
 
-  function results(){
+function results(){
 const tot={},cnt={},bn=[];
 Q.forEach(q=>{const o=S.ans[q.id];tot[q.p]=(tot[q.p]||0)+o[1];cnt[q.p]=(cnt[q.p]||0)+1;if(o[2])bn.push({p:P[q.p].t,t:o[2],s:o[1]})});
 const keys=Object.keys(P),sc={};keys.forEach(k=>sc[k]=Math.round(tot[k]/cnt[k]));
