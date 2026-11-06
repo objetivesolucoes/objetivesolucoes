@@ -104,35 +104,6 @@ function nav(d){if(d>0&&S.qi==Q.length-1)return results();S.qi+=d;showQ(true)}
 
 const loss=(sc,s,r,t)=>{const x=(100-sc)/100,m=r*(0.03+x*0.12),n=Math.max(1,Math.round(m/t));return Math.round((n*t*0.5+s*5000*(0.10+x*0.25))*12)};
 
-// CÓDIGO DE INTEGRAÇÃO - ENVIAR DADOS PARA O INTEGRADOR
-const dadosParaEnviar = {
-    empresa: S.info.name,
-    contato: S.info.contactName,
-    cargo: S.info.role,
-    whatsapp: S.info.phone,
-    vendedores: S.info.teamSize,
-    faturamento: S.info.avgRevenue,
-    ticket_medio: S.info.avgTicket,
-    pontuacao_total: all,
-    status_maturidade: tier[0],
-    respostas: Object.keys(S.ans).map(id => ({
-        pergunta: Q.find(q => q.id == id).q,
-        resposta: S.ans[id][0],
-        pontos: S.ans[id][1],
-        critica: S.ans[id][2]
-    }))
-};
-
-// URL do webhook que você vai gerar no Make/n8n
-const WEBHOOK_URL = "SUA_URL_DO_WEBHOOK_AQUI"; 
-
-fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dadosParaEnviar)
-}).then(res => console.log("Dados integrados com sucesso!"))
-  .catch(err => console.error("Erro na integração:", err));
-
 function results(){
 const tot={},cnt={},bn=[];
 Q.forEach(q=>{const o=S.ans[q.id];tot[q.p]=(tot[q.p]||0)+o[1];cnt[q.p]=(cnt[q.p]||0)+1;if(o[2])bn.push({p:P[q.p].t,t:o[2],s:o[1]})});
