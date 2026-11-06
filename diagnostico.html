@@ -109,6 +109,34 @@ const tot={},cnt={},bn=[];
 Q.forEach(q=>{const o=S.ans[q.id];tot[q.p]=(tot[q.p]||0)+o[1];cnt[q.p]=(cnt[q.p]||0)+1;if(o[2])bn.push({p:P[q.p].t,t:o[2],s:o[1]})});
 const keys=Object.keys(P),sc={};keys.forEach(k=>sc[k]=Math.round(tot[k]/cnt[k]));
 const all=Math.round(keys.reduce((a,k)=>a+sc[k],0)/4),top=bn.sort((a,b)=>a.s-b.s).slice(0,3);
+// CÓDIGO DE INTEGRAÇÃO - ENVIAR DADOS PARA O INTEGRADOR
+const dadosParaEnviar = {
+    empresa: S.info.name,
+    contato: S.info.contactName,
+    cargo: S.info.role,
+    whatsapp: S.info.phone,
+    vendedores: S.info.teamSize,
+    faturamento: S.info.avgRevenue,
+    ticket_medio: S.info.avgTicket,
+    pontuacao_total: all,
+    status_maturidade: tier[0],
+    respostas: Object.keys(S.ans).map(id => ({
+        pergunta: Q.find(q => q.id == id).q,
+        resposta: S.ans[id][0],
+        pontos: S.ans[id][1],
+        critica: S.ans[id][2]
+    }))
+};
+
+// URL do webhook que você vai gerar no Make/n8n
+const WEBHOOK_URL = "SUA_URL_DO_WEBHOOK_AQUI"; 
+
+fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dadosParaEnviar)
+}).then(res => console.log("Dados integrados com sucesso!"))
+  .catch(err => console.error("Erro na integração:", err));
 let tier=['Crítico / Improviso','text-red-400','bg-red-500/10','border-red-500/30'];
 if(all>=80)tier=['Alta Maturidade & Escalável','text-emerald-400','bg-emerald-500/10','border-emerald-500/30'];
 else if(all>=55)tier=['Intermediário / Gargalos Operacionais','text-amber-400','bg-amber-500/10','border-amber-500/30'];
